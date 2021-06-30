@@ -1,0 +1,204 @@
+-- creación de tablas
+create table Cliente(
+	id_Cliente int primary key not null,
+	cedula int,
+	nombres varchar(50),
+	apellidos varchar(50),
+	telefono int,
+	direccion varchar(60));
+
+create table Empleado(
+	id_Empleado int primary key not null,
+	cedulaE int,
+	nombre varchar(50),
+	apellido varchar(50),
+	direccion varchar(60),
+	fecha_ingreso date,
+	telefono int );
+
+create table Tecnico(
+	id_Tecnico int primary key not null,
+	cedulaT int,
+	nombreT varchar(50),
+	apellidoT varchar(50),
+	telefono int,
+	direccion varchar(60),
+	descripcion varchar(60));
+
+create table Mensual(
+	id_Mes int primary key not null,
+	nombre_Mes varchar(50),
+	año int );
+
+create table Lote(
+	idLote int primary key not null,
+	serie varchar(50),
+	total_Medidores int,
+	numero_Lote int );
+
+create table Medidor(
+	id_Medidor int primary key not null,
+	numero_Medidor int,
+	caracteristicas varchar(50),
+	id_lotepk int,
+	foreign key(id_lotepk) references Lote(idLote));
+
+create table Mantenimiento(
+	id_Mantenimiento int primary key not null,
+	fecha_Mantenimiento date,
+	id_tecnicopk int,
+	id_clientepk int,
+	foreign key(id_tecnicopk) references Tecnico(id_Tecnico),
+	foreign key(id_clientepk) references Cliente(id_Cliente));
+
+create table Toma_de_Mediciones(
+	id_Tomas int primary key not null,
+	fecha date,
+	totalm3 int,
+	id_empleadopk int,
+	id_clientepk int,
+	id_medidorpk int,
+	foreign key(id_empleadopk) references Empleado(id_Empleado),
+	foreign key(id_clientepk) references Cliente(id_Cliente),
+	foreign key(id_medidorpk) references Medidor(id_Medidor));
+
+create table Convenio(
+	id_Convenio int primary key not null,
+	descripcion varchar(50),
+	total decimal(6,2),
+	fecha date,
+	tiempo_Convenio varchar(50),
+	id_clientepk int,
+	foreign key(id_clientepk) references Cliente(id_Cliente));
+
+create table Consumo_de_Agua
+	id_Consumo int primary key not null,
+	fecha date,
+	total decimal(6,2),
+	interes_Mora_Pago decimal(6,2),
+	descripcion_Pago varchar(50),
+	id_clientepk int,
+	id_mespk int,
+	id_tomaspk int,
+	foreign key(id_clientepk) references Cliente(id_Cliente),
+	foreign key(id_mespk) references Mensualidad(id_Mes),
+	foreign key(id_tomaspk) references Toma_de_Mediciones(id_Tomas));
+
+-- Inserción de datos en las tablas
+insert  into Tecnico(id_Tecnico,cedulaT,nombreT,apellidoT,telefono,direccion,descripcion)
+values	(1,1377474098,'Alberto','Macías',0998764567,'Manta - La Pradera','Título Tecnológico'),
+		(2, 1377222993,'Mauro','Cañar',0998374444,'Manta - El Dorado','Título Bachiller'),
+		(3, 1377556234,'Alex','Kiwi',0878475874,'Portoviejo - El Floron','Título Tecnológico'),
+		(4, 1377746445,'Cristian','Oña',0891118344,'Manta - Miraflores','Título Tecnológico')
+select * from Tecnico
+
+insert  into Empleado(id_Empleado,cedulaE,nombre,apellido,direccion,fecha_ingreso,telefono)
+values	(1,1313144243,'Saúl','Panchana','Manta - Las Cumbres','2020-10-02',0987473733),
+		(2,1345252622,'Pedro','Balcazar','Manta - Bellavista','2020-03-09',0937365732),
+		(3,1356464777,'Eloy','Pihuave','Manta - Tarqui','2020-11-25',0988836371)
+select * from Empleado
+
+insert into Cliente(id_Cliente,cedula,nombres,apellidos,telefono,direccion)
+values  (121,'Ana Cristina','Sanchez Párraga',0907646322,'Manta - Barrio Tarqui'),
+		(122,1313455670,'Juan Alex','Baque Vera',0901112736,'Manta - Barrio Urbirios'),
+		(123, 1313453334,'Cirilo Dary','Alfaro Gil',0907364456,'Manta - 5 de Agosto'),
+		(124, 1313452221,'Katy Anabel','Mendoza Díaz',0907365768,'Manta - La Padrera'),
+		(125, 1313457765,'Matias Alberto','Oyola Rodriguez',0907356781,'Manta - Jocay')
+select * from Cliente
+
+insert into Mensual(id_Mes,nombre_Mes,año)
+values  (1,'Enero',2021),
+		(2,'Febrero',2021),
+		(3,'Marzo',2021),
+		(4,'Abril',2021),
+		(5,'Mayo',2021),
+		(6,'Junio',2021),
+		(7,'Julio',2021),
+		(8,'Agosto',2021),
+		(9,'Septiembre',2021),
+		(10,'Octubre',2021),
+		(11,'Noviembre',2021),
+		(12,'Diciembre',2021)
+select * from Mensual
+
+insert into Lote(idLote,serie,total_Medidores,numero_Lote)
+values  (1,'AT-500 Nuevo',800,10),
+        (2,'NQ-1100',1000,11),
+		(3,'AT-120',500,12)
+select * from Lote
+
+insert into Medidor(id_Medidor,numero_Medidor,caracteristicas,id_lotepk)
+values	(1,12,'Multimag QP:1,5m3/h',1),
+		(2,13,'Multimag QP:1m3/h',2),
+		(3,14,'Multimag QP:2m3/h',3),
+		(4,15,'Multimag QP:1,5m3/h',1),
+		(5,16,'Multimag QP:1,5m3/h',1),
+		(6,17,'Multimag QP:1m3/h',2),
+		(7,18,'Multimag QP:1m3/h',2),
+		(8,19,'Multimag QP:2m3/h',3),
+		(9,20,'Multimag QP:2m3/h',3),
+		(10,21,'Multimag QP:2m3/h',3)
+select * from Medidor
+
+insert into Mantenimiento(id_Mantenimiento,fecha_Mantenimiento,id_tecnicopk,id_clientepk)
+values  (1,'2020-12-08',01,121),
+		(2,'2020-11-18',02,122),
+		(3,'2021-04-20',03,123),
+		(4,'2021-01-11',01,124),
+		(5,'2021-07-14',01,125)
+select * from Mantenimiento
+
+
+insert into Toma_de_Mediciones(id_Tomas,fecha,totalm3,id_empleadopk,id_clientepk,id_medidorpk)
+values	(10,'2021-05-01',1,121,1),
+		(11,'2021-05-11',123344,2,122,2),
+		(12,'2021-06-10',235355,2,122,3),
+		(13,'2021-05-21',987222,3,124,4),
+		(14,'2021-06-15',235444,2,125,5),
+		(15,'2021-05-25',333224,3,123,6)
+select * from Toma_de_Mediciones
+
+insert into Convenio(id_Convenio,descripcion,total,fecha,tiempo_Convenio,id_clientepk)
+values	(100,'Convenio/Si',10.00,'2019-10-10','2 años',121),
+		(101,'Convenio/Si',8.00,'2019-01-19','5 años',122),
+		(102,'Convenio/Si',12.50,'2019-09-05','3 años',123),
+		(103,'Convenio/Si',25.80,'2019-12-25','2 años',124),
+		(104,'Convenio/Si',10.45,'2019-04-21','4 años',125)
+select * from Convenio
+
+insert into Consumo_de_Agua(id_Consumo,fecha,total,interes_Mora_Pago,descripcion_Pago,id_clientepk,id_mespk,id_tomaspk)
+values	(1,'2021-02-02',12.56,0.80,'Tarifa Normal',121,2,10),
+		(2,'2021-02-21',31.02,0.80,'Tarifa Normal',122,2,11),
+		(3,'2021-03-05',15.76,0.80,'Tarifa Normal',121,3,10),
+		(4,'2021-03-18',7.10,0.80,'Tarifa Normal',122,3,11)
+(5,'2021-04-15',25.76,0.80,'Tercera Edad',124,4,13),
+(6,'2021-04-28',17.10,0.80,'Tercera Edad',125,4,14),
+(7,'2021-05-25',34.76,0.80,'Tarifa Normal',123,5,15)
+
+-- CONSULTAS
+-- Muestre cada cliente cuantas facturas ha pagado
+	select nombres,apellidos,fecha,total as total_de_facturas
+	from Consumo_de_Agua s inner join Cliente on id_Cliente=id_clientepk  where id_clientepk=121
+	select count(id_Consumo) as total_de_facturas
+	from Consumo_de_Agua s inner join Cliente on id_Cliente=id_clientepk  where id_clientepk=121 
+
+-- Determinar por cada lote de medidores cuantos se ha ocupado
+	select numero_Lote,serie,total_Medidores
+	from Medidor  inner join Lote l on id_lotepk=l.idLote where numero_Lote=12
+	select count(numero_Lote) as total_medidores_usados
+	from Medidor inner join Lote l on id_lotepk=l.idLote where numero_Lote=12
+
+-- Nombre de cada tecnico y cuantos mantenimientos ha tenido
+	select nombreT,apellidoT,fecha_Mantenimiento
+	from Tecnico  inner join Mantenimiento on id_tecnicopk=id_Tecnico  where id_tecnicopk=01
+	select count(id_tecnicopk) as total_Mantenimientos
+	from Tecnico inner join Mantenimiento on id_tecnicopk=id_Tecnico  where id_tecnicopk=01
+
+-- Numero de cliente que tengo por cada tarifa de cobro
+
+	select nombres,apellidos,fecha,descripcion_Pago
+	from  Consumo_de_Agua inner join Cliente on id_Cliente=id_clientepk
+	select count(descripcion_Pago) as Total_Tarifa_Tercera_Edad
+	from Consumo_de_Agua inner join Cliente on id_Cliente=id_clientepk  where descripcion_Pago='Tercera Edad'
+	select count(descripcion_Pago) as Total_Tarifa_Normal
+	from Consumo_de_Agua inner join Cliente on id_Cliente=id_clientepk  where descripcion_Pago='Tarifa Normal'
